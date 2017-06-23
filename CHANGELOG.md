@@ -4,7 +4,7 @@ Initial release
 
 ### Added
 
-- Add Fundamental features
+- Add get/add/rm/ls/open/peco
 
 ### Deprecated
 

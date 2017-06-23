@@ -6,12 +6,11 @@ import (
 	"github.com/matsu-chara/gol/util"
 )
 
-// CmdAdd add key value
-func CmdAdd(c *cli.Context) {
+// CmdServer server
+func CmdServer(c *cli.Context) {
 	filepath := c.GlobalString("datapath")
-	key := c.Args().Get(0)
-	value := c.Args().Get(1)
+	port := c.Uint("port")
 
-	err := operations.RunAdd(filepath, key, value)
+	err := operations.RunServer(filepath, port)
 	util.ExitIfError(err)
 }

@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
+	"github.com/matsu-chara/gol/util"
 )
 
 func main() {
@@ -19,5 +20,6 @@ func main() {
 	app.Commands = Commands
 	app.CommandNotFound = CommandNotFound
 
-	app.Run(os.Args)
+	err := app.Run(os.Args)
+	util.ExitIfError(err)
 }

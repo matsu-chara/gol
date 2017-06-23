@@ -1,0 +1,7 @@
+language: go
+
+script:
+ - test -z "$(gofmt -d .)"
+ - test -z "$(go tool vet .)"
+ - go build
+ - go test -v

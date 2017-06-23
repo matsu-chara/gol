@@ -32,4 +32,9 @@ Framework = "codegangsta_cli"
 [[Commands]]
   Name = "peco"
   Synopsis = "p"
-  Help = ""
+  Help = "open in peco"
+
+[[Commands]]
+  Name = "server"
+  Synopsis = "s"
+  Help = "run server"
