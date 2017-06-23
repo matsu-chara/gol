@@ -1,0 +1,35 @@
+Name = "gol"
+Owner = "matsu-chara"
+Version = "0.1.0"
+Description = "gol(go link) is a url shortner"
+Framework = "codegangsta_cli"
+
+[[Commands]]
+  Name = "add"
+  Synopsis = "a"
+  Help = "add key"
+
+[[Commands]]
+  Name = "rm"
+  Synopsis = "r"
+  Help = "rm key"
+
+[[Commands]]
+  Name = "ls"
+  Synopsis = "l"
+  Help = "ls"
+
+[[Commands]]
+  Name = "get"
+  Synopsis = "g"
+  Help = "get key"
+
+[[Commands]]
+  Name = "open"
+  Synopsis = "o"
+  Help = "open key"
+
+[[Commands]]
+  Name = "peco"
+  Synopsis = "p"
+  Help = ""
