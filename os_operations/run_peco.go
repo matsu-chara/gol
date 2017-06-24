@@ -1,4 +1,4 @@
-package operations
+package os_operations
 
 import (
 	"fmt"
@@ -7,11 +7,12 @@ import (
 	"strings"
 
 	"github.com/matsu-chara/gol/kvs"
+	"github.com/matsu-chara/gol/operations"
 )
 
 // RunPeco filter by prefix and select in peco, then open in browser
 func RunPeco(filepath string, prefix string) error {
-	entries, err := RunLs(filepath)
+	entries, err := operations.RunLs(filepath)
 	if err != nil {
 		return err
 	}

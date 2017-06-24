@@ -4,7 +4,7 @@ Initial release
 
 ### Added
 
-- Add get/add/rm/ls/open/peco
+- Add get/add/rm/ls/open/peco/server
 
 ### Deprecated
 

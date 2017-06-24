@@ -2,7 +2,7 @@ package command
 
 import (
 	"github.com/codegangsta/cli"
-	"github.com/matsu-chara/gol/operations"
+	"github.com/matsu-chara/gol/os_operations"
 	"github.com/matsu-chara/gol/util"
 )
 
@@ -10,6 +10,6 @@ import (
 func CmdOpen(c *cli.Context) {
 	filepath := c.GlobalString("datapath")
 	key := c.Args().Get(0)
-	err := operations.RunOpen(filepath, key)
+	err := os_operations.RunOpen(filepath, key)
 	util.ExitIfError(err)
 }

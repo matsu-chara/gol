@@ -1,10 +1,13 @@
-package operations
+package os_operations
 
-import "os/exec"
+import (
+	"github.com/matsu-chara/gol/operations"
+	"os/exec"
+)
 
 // RunOpen get entry with key, then open in browser
 func RunOpen(filepath string, key string) error {
-	entry, err := RunGet(filepath, key)
+	entry, err := operations.RunGet(filepath, key)
 	if err != nil {
 		return err
 	}
