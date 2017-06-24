@@ -26,9 +26,27 @@ func makeHandler(filepath string) func(http.ResponseWriter, *http.Request) {
 		params := strings.Split(r.URL.Path, "/")
 		key := params[1]
 
+		if key == "" {
+			respondDump(filepath, w)
+			return
+		}
+
 		respondGet(filepath, key, params[2:], w, r)
 		return
 	}
+}
+
+func respondDump(filepath string, w http.ResponseWriter) {
+	dumped, err := operations.RunDump(filepath)
+	if err != nil {
+		fmt.Println(err)
+		respondInternalServerError(w)
+		return
+	}
+	dumpedJSON, err := json.MarshalIndent(dumped, "", "\t")
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(dumpedJSON)
+	return
 }
 
 func respondGet(filepath string, key string, params []string, w http.ResponseWriter, r *http.Request) {

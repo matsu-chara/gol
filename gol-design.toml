@@ -25,6 +25,11 @@ Framework = "codegangsta_cli"
   Help = "get key"
 
 [[Commands]]
+  Name = "dump"
+  Synopsis = "d"
+  Help = "run dump"
+
+[[Commands]]
   Name = "open"
   Synopsis = "o"
   Help = "open key"

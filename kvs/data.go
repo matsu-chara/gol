@@ -58,3 +58,8 @@ func (data *Data) List() []Entry {
 	sort.Sort(Entries(entries))
 	return entries
 }
+
+// Dump data.
+func (data *Data) Dump() map[string]string {
+	return data.data
+}

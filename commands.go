@@ -44,6 +44,12 @@ var Commands = []cli.Command{
 		Flags:     []cli.Flag{},
 	},
 	{
+		Name:      "dump",
+		ShortName: "d",
+		Action:    command.CmdDump,
+		Flags:     []cli.Flag{},
+	},
+	{
 		Name:      "open",
 		ShortName: "o",
 		Action:    command.CmdOpen,
