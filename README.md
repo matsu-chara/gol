@@ -48,8 +48,8 @@ $ gol peco jenkins
 # run server at localhost:5656
 $ gol server
 
-# or run in background
-$ nohup gol server&
+# or run in background and restart always
+$ docker-compose up -d
 ```
 
 access `localhost:5656` dumps all links
