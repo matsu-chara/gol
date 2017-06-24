@@ -6,7 +6,9 @@ gol(go link) is a url shortner that run in cli and browser.
 
 ## Usage
 
-### in cmd
+### in cli
+
+![sample/gol_cli.gif](sample/gol_cli.gif)
 
 ```bash
 $ gol add confluence https://confluence.nice-company.com
@@ -40,21 +42,41 @@ $ gol peco jenkins
 
 ### in browser
 
+#### run server
+
 ```bash
+# run server at localhost:5656
 $ gol server
 
-# run in background
+# or run in background
 $ nohup gol server&
 ```
 
+access `localhost:5656` dumps all links
+![sample/gol_chrome1.png](sample/gol_chrome1.png)
+
+
+#### setting chrome
+
 Open Chrome > Preference > add Search Engine > add below
 
+```
 - name: gol
 - keyword: gol
 - query: http://localhost:5656/%s
+```
+
+#### go-link in chrome!
 
 then, you can open gol links by
 click url bar > type 'gol' > tab > type key > enter
+
+type `gol` >  tab > type key
+![sample/gol_chrome2.png](sample/gol_chrome2.png)
+
+then enter > jump to the link!
+![sample/gol_chrome3.png](sample/gol_chrome3.png)
+
 
 
 ## Install
