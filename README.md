@@ -77,8 +77,6 @@ type `gol` >  tab > type key
 then enter > jump to the link!
 ![sample/gol_chrome3.png](sample/gol_chrome3.png)
 
-
-
 ## Install
 
 To install, use `go get`:

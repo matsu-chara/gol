@@ -1,7 +1,11 @@
 language: go
 
+install:
+  - go get github.com/golang/dep/cmd/dep
+
 script:
- - test -z "$(gofmt -d .)"
- - test -z "$(go tool vet .)"
- - go build
- - go test -v
+  - dep ensure
+  - test -z "$(gofmt -d .)"
+  - test -z "$(go tool vet .)"
+  - go build
+  - go test -v
