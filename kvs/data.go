@@ -11,6 +11,7 @@ type Data struct {
 }
 
 // Get key from data
+// return entry and isExists
 func (data *Data) Get(key string) (*Entry, bool) {
 	value, ok := data.data[key]
 	if !ok {
