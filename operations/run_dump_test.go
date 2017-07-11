@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestCmdDump(t *testing.T) {
+func TestRunDump(t *testing.T) {
 	testFile := tempTest("dump")
 	defer os.Remove(testFile)
 

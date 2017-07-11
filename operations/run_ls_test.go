@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestCmdLs(t *testing.T) {
+func TestRunLs(t *testing.T) {
 	testFile := tempTest("dump")
 	defer os.Remove(testFile)
 

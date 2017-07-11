@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestCmdAdd(t *testing.T) {
+func TestRunAdd(t *testing.T) {
 	testFile := tempTest("add")
 	defer os.Remove(testFile)
 	initDb(testFile)
