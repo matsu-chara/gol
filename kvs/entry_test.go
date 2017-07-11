@@ -54,6 +54,18 @@ func TestEntryFromPeco(t *testing.T) {
 	}
 }
 
+func TestFilterByPrefix(t *testing.T) {
+	entry1 := Entry{Key: "key1", Value: "v9"}
+	entry2 := Entry{Key: "kay2", Value: "v8"}
+	entry3 := Entry{Key: "key3", Value: "v7"}
+	entries := Entries([]Entry{entry1, entry2, entry3})
+
+	result := entries.FilterByPrefix("ke")
+	if !reflect.DeepEqual(result, Entries([]Entry{entry1, entry3})) {
+		t.Errorf("unexpected result %s", result)
+	}
+}
+
 func TestSortable(t *testing.T) {
 	entry1 := Entry{Key: "k1", Value: "v9"}
 	entry2 := Entry{Key: "k2", Value: "v8"}

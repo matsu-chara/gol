@@ -56,6 +56,16 @@ func EntryFromPeco(str string) (*Entry, error) {
 // Entries for sort and filter
 type Entries []Entry
 
+func (entries Entries) FilterByPrefix(prefix string) Entries {
+	filtered := make([]Entry, 0)
+	for _, entry := range entries {
+		if strings.HasPrefix(entry.Key, prefix) {
+			filtered = append(filtered, entry)
+		}
+	}
+	return filtered
+}
+
 // Len for sort
 func (es Entries) Len() int {
 	return len(es)

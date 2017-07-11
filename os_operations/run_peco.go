@@ -2,12 +2,10 @@ package os_operations
 
 import (
 	"fmt"
-	"io"
-	"os/exec"
-	"strings"
-
 	"github.com/matsu-chara/gol/kvs"
 	"github.com/matsu-chara/gol/operations"
+	"io"
+	"os/exec"
 )
 
 // RunPeco filter by prefix and select in peco, then open in browser
@@ -17,7 +15,7 @@ func RunPeco(filepath string, prefix string) error {
 		return err
 	}
 
-	pecoTarget := filterByPrefix(entries, prefix)
+	pecoTarget := kvs.Entries(entries).FilterByPrefix(prefix)
 
 	c1 := exec.Command("peco")
 	stdin, err := c1.StdinPipe()
@@ -53,14 +51,4 @@ func RunPeco(filepath string, prefix string) error {
 	}
 
 	return nil
-}
-
-func filterByPrefix(entries []kvs.Entry, prefix string) []kvs.Entry {
-	filtered := make([]kvs.Entry, 0)
-	for _, entry := range entries {
-		if strings.HasPrefix(entry.Key, prefix) {
-			filtered = append(filtered, entry)
-		}
-	}
-	return filtered
 }
