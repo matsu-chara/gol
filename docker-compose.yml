@@ -3,6 +3,7 @@ version: '3'
 services:
   server:
     build: .
+    container_name: gol_server
     restart: always
     ports:
       - '5656:5656'
