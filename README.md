@@ -3,6 +3,7 @@
 gol(go link) is a url shortner that run in cli and browser.
 
 [![Build Status](https://travis-ci.org/matsu-chara/gol.svg?branch=master)](https://travis-ci.org/matsu-chara/gol)
+[![Go Report Card](https://goreportcard.com/badge/github.com/matsu-chara/gol)](https://goreportcard.com/report/github.com/matsu-chara/gol)
 
 ## Usage
 
