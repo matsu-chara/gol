@@ -19,6 +19,6 @@ func TestRunRm(t *testing.T) {
 	}
 	result, isExists := db.Get("k1")
 	if isExists || result != nil {
-		t.Error("key_add was found. result = %s", result)
+		t.Errorf("key_add was found. result = %s", result)
 	}
 }
