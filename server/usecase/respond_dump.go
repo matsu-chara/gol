@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// Dump dumps all links in kvs
 func Dump(filepath string, w http.ResponseWriter) {
 	dumped, err := operations.RunDump(filepath)
 	if err != nil {

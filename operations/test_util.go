@@ -7,7 +7,7 @@ import (
 )
 
 func tempTest(name string) string {
-	return filepath.Join(os.TempDir(), "/gol_test_" + name)
+	return filepath.Join(os.TempDir(), "/gol_test_"+name)
 }
 
 func initDb(testFile string) error {

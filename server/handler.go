@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// NewGolServerHandler creates new handler
 func NewGolServerHandler(filepath string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := strings.Split(r.URL.Path, "/")

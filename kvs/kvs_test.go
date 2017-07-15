@@ -2,8 +2,8 @@ package kvs
 
 import (
 	"os"
-	"testing"
 	"path/filepath"
+	"testing"
 )
 
 func TestOpen(t *testing.T) {
