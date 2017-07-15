@@ -12,4 +12,4 @@ script:
   - gofmt -s -d . | xargs -r false
   - go build
   - gometalinter --deadline 60s
-  - go test $(go list ./... | grep -v /vendor/ | tail -n +2)
+  - go test $(go list ./... | grep -v /vendor/)
