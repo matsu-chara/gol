@@ -1,4 +1,4 @@
-package os_operations
+package exec
 
 import (
 	"fmt"

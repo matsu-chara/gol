@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/matsu-chara/gol/server/use_case"
+	"github.com/matsu-chara/gol/server/usecase"
 	"net/http"
 	"strings"
 )
@@ -12,11 +12,11 @@ func NewGolServerHandler(filepath string) func(http.ResponseWriter, *http.Reques
 		key := params[1]
 
 		if key == "" {
-			use_case.Dump(filepath, w)
+			usecase.Dump(filepath, w)
 			return
 		}
 
-		use_case.Get(filepath, key, params[2:], w, r)
+		usecase.Get(filepath, key, params[2:], w, r)
 		return
 	}
 }
