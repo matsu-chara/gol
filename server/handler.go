@@ -1,9 +1,10 @@
 package server
 
 import (
-	"github.com/matsu-chara/gol/server/usecase"
 	"net/http"
 	"strings"
+
+	"github.com/matsu-chara/gol/server/usecase"
 )
 
 // NewGolServerHandler creates new handler

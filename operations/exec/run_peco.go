@@ -2,10 +2,11 @@ package exec
 
 import (
 	"fmt"
-	"github.com/matsu-chara/gol/kvs"
-	"github.com/matsu-chara/gol/operations"
 	"io"
 	"os/exec"
+
+	"github.com/matsu-chara/gol/kvs"
+	"github.com/matsu-chara/gol/operations"
 )
 
 // RunPeco filter by prefix and select in peco, then open in browser

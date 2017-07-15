@@ -1,9 +1,10 @@
 package operations
 
 import (
-	"github.com/matsu-chara/gol/kvs"
 	"os"
 	"testing"
+
+	"github.com/matsu-chara/gol/kvs"
 )
 
 func TestRunAdd(t *testing.T) {

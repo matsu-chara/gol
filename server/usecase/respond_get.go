@@ -2,9 +2,10 @@ package usecase
 
 import (
 	"fmt"
-	"github.com/matsu-chara/gol/operations"
 	"net/http"
 	"strings"
+
+	"github.com/matsu-chara/gol/operations"
 )
 
 // Get redirect to value url

@@ -1,8 +1,9 @@
 package exec
 
 import (
-	"github.com/matsu-chara/gol/operations"
 	"os/exec"
+
+	"github.com/matsu-chara/gol/operations"
 )
 
 // RunOpen get entry with key, then open in browser

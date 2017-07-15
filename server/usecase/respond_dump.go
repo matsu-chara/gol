@@ -3,8 +3,9 @@ package usecase
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/matsu-chara/gol/operations"
 	"net/http"
+
+	"github.com/matsu-chara/gol/operations"
 )
 
 // Dump dumps all links in kvs

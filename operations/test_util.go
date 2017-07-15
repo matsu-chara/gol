@@ -1,9 +1,10 @@
 package operations
 
 import (
-	"github.com/matsu-chara/gol/kvs"
 	"os"
 	"path/filepath"
+
+	"github.com/matsu-chara/gol/kvs"
 )
 
 func tempTest(name string) string {
