@@ -8,4 +8,4 @@ script:
   - gofmt -d . && test -z "$(gofmt -d .)"
   - go tool vet .
   - go build
-  - go test -v
+  - go test $(go list ./... | grep -v /vendor/)
