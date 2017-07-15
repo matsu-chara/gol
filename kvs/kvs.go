@@ -5,12 +5,14 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"sync"
 )
 
 // KVS which have data and metadata
 type KVS struct {
 	filename string
 	Data
+	mutex sync.Mutex
 }
 
 const (
@@ -45,6 +47,9 @@ func Open(filename string) (*KVS, error) {
 
 // Save all data.
 func (kvs *KVS) Save() error {
+	kvs.mutex.Lock()
+	defer kvs.mutex.Unlock()
+
 	newJSON, err := json.Marshal(kvs.data)
 	if err != nil {
 		return err
