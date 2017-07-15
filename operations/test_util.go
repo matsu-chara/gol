@@ -3,10 +3,11 @@ package operations
 import (
 	"github.com/matsu-chara/gol/kvs"
 	"os"
+	"path/filepath"
 )
 
 func tempTest(name string) string {
-	return os.TempDir() + "gol_test_" + name
+	return filepath.Join(os.TempDir(), "/gol_test_" + name)
 }
 
 func initDb(testFile string) error {

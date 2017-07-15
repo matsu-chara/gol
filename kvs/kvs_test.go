@@ -3,11 +3,12 @@ package kvs
 import (
 	"os"
 	"testing"
+	"path/filepath"
 )
 
 func TestOpen(t *testing.T) {
 	dir := os.TempDir()
-	testFile := dir + "gol_test_open"
+	testFile := filepath.Join(dir, "gol_test_open")
 	defer os.Remove(testFile)
 
 	kvs, err := Open(testFile)
@@ -23,7 +24,7 @@ func TestOpen(t *testing.T) {
 
 func TestSave(t *testing.T) {
 	dir := os.TempDir()
-	testFile := dir + "gol_test_save"
+	testFile := filepath.Join(dir, "gol_test_save")
 	defer os.Remove(testFile)
 
 	kvs, err := Open(testFile)
@@ -63,7 +64,7 @@ func TestSave(t *testing.T) {
 
 func TestClose(t *testing.T) {
 	dir := os.TempDir()
-	testFile := dir + "gol_test_close"
+	testFile := filepath.Join(dir, "gol_test_close")
 	defer os.Remove(testFile)
 
 	kvs, _ := Open(testFile)
