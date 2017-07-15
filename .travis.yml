@@ -5,7 +5,7 @@ install:
 
 script:
   - dep ensure
-  - test -z "$(gofmt -d .)"
-  - test -z "$(go tool vet . 2>&1)"
+  - gofmt -d . && test -z "$(gofmt -d .)"
+  - go tool vet .
   - go build
   - go test -v
