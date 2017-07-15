@@ -6,6 +6,6 @@ install:
 script:
   - dep ensure
   - test -z "$(gofmt -d .)"
-  - test -z "$(go tool vet .)"
+  - test -z "$(go tool vet . 2>&1)"
   - go build
   - go test -v
