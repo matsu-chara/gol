@@ -15,6 +15,12 @@ func Dump(filepath string, w http.ResponseWriter) {
 		return
 	}
 	dumpedJSON, err := json.MarshalIndent(dumped, "", "\t")
+	if err != nil {
+		fmt.Println(err)
+		respondInternalServerError(w)
+		return
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(dumpedJSON)
 	return
