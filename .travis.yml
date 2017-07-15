@@ -2,10 +2,14 @@ language: go
 
 install:
   - go get github.com/golang/dep/cmd/dep
+  - go get github.com/alecthomas/gometalinter
+
+before_script:
+  - gometalinter --install
 
 script:
   - dep ensure
-  - gofmt -d . && test -z "$(gofmt -d .)"
-  - go tool vet .
+  - gofmt -s -d . | xargs -r false
   - go build
-  - go test $(go list ./... | grep -v /vendor/)
+  - gometalinter --deadline 60s
+  - go test $(go list ./... | grep -v /vendor/ | tail -n +2)
