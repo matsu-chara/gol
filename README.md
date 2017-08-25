@@ -53,8 +53,23 @@ $ gol server
 $ docker-compose up -d
 ```
 
+### API
+
+#### dump
 access `localhost:5656` dumps all links
 ![sample/gol_chrome1.png](sample/gol_chrome1.png)
+
+#### get
+
+access `localhost:5656/${key}` to get value
+
+#### post
+
+`curl -d value=${some_url} localhost:5656/${key}` add a link to key
+
+#### delete
+
+`curl -X DELETE localhost:5656/${key}` delete a link
 
 
 #### setting chrome

@@ -1,9 +1,11 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -77,4 +79,152 @@ func TestGolServerDump(t *testing.T) {
 		t.Errorf("handler returned unexpected body %v", rr.Body.String())
 	}
 
+}
+
+func TestGolServerPost(t *testing.T) {
+	testURL := "http://test/v1"
+
+	testFile := tempTest("post")
+	defer os.Remove(testFile)
+	initDb(testFile)
+	handler := http.HandlerFunc(NewGolServerHandler(testFile))
+
+	req, err := http.NewRequest("POST", "/newItem", strings.NewReader(fmt.Sprintf("value=%s", testURL)))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusCreated {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+
+	req, err = http.NewRequest("GET", "/newItem", nil)
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusSeeOther {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+
+	// Check the response body is what we expect.
+	if rr.Header().Get("Location") != testURL {
+		t.Errorf("handler returned unexpected location header: got %v", rr.Header().Get("Location"))
+	}
+}
+
+func TestGolServerCannotPostSameElement(t *testing.T) {
+	testFile := tempTest("post")
+	defer os.Remove(testFile)
+	initDb(testFile)
+	handler := http.HandlerFunc(NewGolServerHandler(testFile))
+
+	req, err := http.NewRequest("POST", "/k1", strings.NewReader("value=http://test/v1"))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusConflict {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+}
+
+func TestGolServerCannotPostWithKeyWhichContainsSlash(t *testing.T) {
+	testFile := tempTest("post")
+	defer os.Remove(testFile)
+	initDb(testFile)
+	handler := http.HandlerFunc(NewGolServerHandler(testFile))
+
+	req, err := http.NewRequest("POST", "/k1/", nil)
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusBadRequest {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+}
+
+func TestGolServerDelete(t *testing.T) {
+	testFile := tempTest("delete")
+	defer os.Remove(testFile)
+	initDb(testFile)
+	handler := http.HandlerFunc(NewGolServerHandler(testFile))
+
+	req, err := http.NewRequest("DELETE", "/k1", nil)
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+
+	req, err = http.NewRequest("GET", "/k1/test/test", nil)
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusNotFound {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+}
+
+func TestGolServerDeleteShouldNotContainSlashInKey(t *testing.T) {
+	testFile := tempTest("delete")
+	defer os.Remove(testFile)
+	initDb(testFile)
+	handler := http.HandlerFunc(NewGolServerHandler(testFile))
+
+	req, err := http.NewRequest("DELETE", "/k1/foo", nil)
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusBadRequest {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+}
+
+func TestGolServerUnSupportedMethod(t *testing.T) {
+	testFile := tempTest("unsupported")
+	defer os.Remove(testFile)
+	initDb(testFile)
+	handler := http.HandlerFunc(NewGolServerHandler(testFile))
+
+	req, err := http.NewRequest("PUT", "/k1/test/test", nil)
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusMethodNotAllowed {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
 }
