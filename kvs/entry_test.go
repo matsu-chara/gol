@@ -7,14 +7,21 @@ import (
 )
 
 func TestNewEntry(t *testing.T) {
-	_, err := NewEntry("", "")
-	if err == nil {
+	_, err1 := NewEntry("", "v")
+	if err1 == nil {
 		t.Error("no error for empty key")
 	}
 
-	_, err2 := NewEntry("", "")
+	_, err2 := NewEntry("k", "")
 	if err2 == nil {
 		t.Error("no error for empty value")
+	}
+}
+
+func TestNewEntryWithKeyWhichHasSlash(t *testing.T) {
+	_, err := NewEntry("a/b", "foo")
+	if err == nil {
+		t.Error("no error for key with slash")
 	}
 }
 

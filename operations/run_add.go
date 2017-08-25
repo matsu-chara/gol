@@ -1,6 +1,8 @@
 package operations
 
-import "github.com/matsu-chara/gol/kvs"
+import (
+	"github.com/matsu-chara/gol/kvs"
+)
 
 // RunAdd run add
 func RunAdd(filepath string, key string, value string) error {

@@ -19,6 +19,9 @@ func NewEntry(key string, value string) (*Entry, error) {
 	if key == "" {
 		return nil, errors.New("key is empty")
 	}
+	if len(strings.Split(key, "/")) != 1 {
+		return nil, fmt.Errorf("key contains '/'")
+	}
 
 	if value == "" {
 		return nil, errors.New("value is empty")
