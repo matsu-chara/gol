@@ -56,9 +56,11 @@ func (kvs *KVS) Save() error {
 		return err
 	}
 
-	if err := ioutil.WriteFile(kvs.filename, newJSON, os.FileMode(filePermission)); err != nil {
+	err = fileWrite(kvs.filename, newJSON)
+	if err != nil {
 		return err
 	}
+
 	kvs.Close()
 	return nil
 }
@@ -74,9 +76,33 @@ func prepareFile(filename string) error {
 		return err
 	}
 	if !isExist(filename) {
-		if err := ioutil.WriteFile(filename, []byte("{}"), os.FileMode(filePermission)); err != nil {
+		err := fileWrite(filename, []byte("{}"))
+		if err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+func fileWrite(filename string, data []byte) error {
+	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, filePermission)
+	if err != nil {
+		return err
+	}
+	n, err := f.Write(data)
+	if err != nil {
+		return err
+	}
+	if err == nil && n < len(data) {
+		return fmt.Errorf("Short Write. expected=%d actual=%d", len(data), n)
+	}
+	err = f.Sync()
+	if err != nil {
+		return err
+	}
+	err = f.Close()
+	if err != nil {
+		return err
 	}
 	return nil
 }
