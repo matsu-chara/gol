@@ -2,9 +2,13 @@ package server
 
 import (
 	"fmt"
+	"sync"
 	"log"
 	"net/http"
 )
+
+// lockCtx manage kvs lock.
+var lockCtx sync.RWMutex
 
 // RunServer run server
 func RunServer(filepath string, port uint) error {

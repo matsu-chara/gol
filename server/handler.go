@@ -3,13 +3,15 @@ package server
 import (
 	"net/http"
 	"strings"
-
 	"github.com/matsu-chara/gol/server/usecase"
 )
 
 // NewGolServerHandler creates new handler
 func NewGolServerHandler(filepath string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		lockCtx.RLock()
+		defer lockCtx.RUnlock()
+
 		params := strings.Split(r.URL.Path, "/")
 		key := params[1]
 
