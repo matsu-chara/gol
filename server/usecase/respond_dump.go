@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/matsu-chara/gol/operations"
@@ -12,14 +11,12 @@ import (
 func Dump(filepath string, w http.ResponseWriter) {
 	dumped, err := operations.RunDump(filepath)
 	if err != nil {
-		fmt.Println(err)
-		respondInternalServerError(w)
+		respondInternalServerError(err, w)
 		return
 	}
 	dumpedJSON, err := json.MarshalIndent(dumped, "", "\t")
 	if err != nil {
-		fmt.Println(err)
-		respondInternalServerError(w)
+		respondInternalServerError(err, w)
 		return
 	}
 

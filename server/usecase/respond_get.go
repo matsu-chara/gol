@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -12,8 +11,7 @@ import (
 func Get(filepath string, key string, params []string, w http.ResponseWriter, r *http.Request) {
 	entry, err := operations.RunGet(filepath, key)
 	if err != nil {
-		fmt.Println(err)
-		respondInternalServerError(w)
+		respondInternalServerError(err, w)
 		return
 	}
 	if entry == nil {

@@ -1,8 +1,13 @@
 package usecase
 
-import "net/http"
+import (
+	"log"
+	"net/http"
+)
 
-func respondInternalServerError(w http.ResponseWriter) {
+func respondInternalServerError(err error, w http.ResponseWriter) {
+	log.Println(err)
+
 	status := http.StatusInternalServerError
 	http.Error(w, http.StatusText(status), status)
 	return
