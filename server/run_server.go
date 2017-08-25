@@ -2,9 +2,9 @@ package server
 
 import (
 	"fmt"
-	"sync"
 	"log"
 	"net/http"
+	"sync"
 )
 
 // lockCtx manage kvs lock.

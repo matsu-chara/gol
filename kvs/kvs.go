@@ -2,9 +2,9 @@ package kvs
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
-	"fmt"
 	"path"
 	"sync"
 )
