@@ -100,3 +100,7 @@ To install, use `go get`:
 ```bash
 $ go get github.com/matsu-chara/gol
 ```
+
+## zsh completion
+
+https://gist.github.com/3tty0n/0ef541bb9fce758c4c064ce96ba83a91
