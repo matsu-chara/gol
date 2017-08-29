@@ -86,6 +86,8 @@ func prepareFile(filename string) error {
 
 func fileWrite(filename string, data []byte) error {
 	f, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, filePermission)
+	defer f.Close()
+
 	if err != nil {
 		return err
 	}
@@ -97,10 +99,6 @@ func fileWrite(filename string, data []byte) error {
 		return fmt.Errorf("Short Write. expected=%d actual=%d", len(data), n)
 	}
 	err = f.Sync()
-	if err != nil {
-		return err
-	}
-	err = f.Close()
 	if err != nil {
 		return err
 	}
