@@ -2,7 +2,6 @@ package kvs
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -91,12 +90,9 @@ func fileWrite(filename string, data []byte) error {
 	if err != nil {
 		return err
 	}
-	n, err := f.Write(data)
+	_, err = f.Write(data)
 	if err != nil {
 		return err
-	}
-	if err == nil && n < len(data) {
-		return fmt.Errorf("Short Write. expected=%d actual=%d", len(data), n)
 	}
 	err = f.Sync()
 	if err != nil {
