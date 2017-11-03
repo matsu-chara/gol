@@ -140,6 +140,45 @@ func TestGolServerCannotPostSameElement(t *testing.T) {
 	}
 }
 
+func TestGolServerReplaceSameElementWhenPostWithForceFlag(t *testing.T) {
+	testURL := "http://test/v1"
+
+	testFile := tempTest("post")
+	defer os.Remove(testFile)
+	initDb(testFile)
+	handler := http.HandlerFunc(NewGolServerHandler(testFile))
+
+	req, err := http.NewRequest("POST", "/k1", strings.NewReader(fmt.Sprintf("value=%s&force=true", testURL)))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusCreated {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+
+	req, err = http.NewRequest("GET", "/k1", nil)
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusSeeOther {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+
+	// Check the response body is what we expect.
+	if rr.Header().Get("Location") != testURL {
+		t.Errorf("handler returned unexpected location header: got %v", rr.Header().Get("Location"))
+	}
+}
+
 func TestGolServerCannotPostWithKeyWhichContainsSlash(t *testing.T) {
 	testFile := tempTest("post")
 	defer os.Remove(testFile)

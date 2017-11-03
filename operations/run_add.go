@@ -5,7 +5,7 @@ import (
 )
 
 // RunAdd run add
-func RunAdd(filepath string, key string, value string) error {
+func RunAdd(filepath string, key string, value string, isForce bool) error {
 	entry, err := kvs.NewEntry(key, value)
 	if err != nil {
 		return err
@@ -17,6 +17,10 @@ func RunAdd(filepath string, key string, value string) error {
 	}()
 	if err != nil {
 		return err
+	}
+
+	if isForce {
+		db.Remove(key)
 	}
 
 	if err := db.Put(entry); err != nil {

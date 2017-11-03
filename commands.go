@@ -23,7 +23,12 @@ var Commands = []cli.Command{
 		Name:      "add",
 		ShortName: "a",
 		Action:    command.CmdAdd,
-		Flags:     []cli.Flag{},
+		Flags: []cli.Flag{
+			cli.BoolFlag{
+				Name:  "force",
+				Usage: "replace when already exists",
+			},
+		},
 	},
 	{
 		Name:      "rm",

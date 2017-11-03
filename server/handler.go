@@ -57,8 +57,9 @@ func handlePost(filepath string, w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error: value is empty. please specify value in POST body and set Content-Type application/x-www-form-urlencoded", http.StatusBadRequest)
 		return
 	}
+	isForce := (r.PostFormValue("force") == "true")
 
-	usecase.Post(filepath, key, value, w, r)
+	usecase.Post(filepath, key, value, isForce, w, r)
 	return
 }
 

@@ -67,6 +67,8 @@ access `localhost:5656/${key}` to get value
 
 `curl -d value=${some_url} localhost:5656/${key}` add a link to key
 
+`curl -d "value=${some_url}&force=true" localhost:5656/${key}` add a link to key (if replace key when conflict)
+
 #### delete
 
 `curl -X DELETE localhost:5656/${key}` delete a link
