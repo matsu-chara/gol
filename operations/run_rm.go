@@ -13,8 +13,5 @@ func RunRm(filepath string, key string) error {
 	}
 
 	db.Remove(key)
-	if err := db.Save(); err != nil {
-		return err
-	}
-	return nil
+	return db.Save()
 }

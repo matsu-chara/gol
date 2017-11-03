@@ -17,8 +17,5 @@ func RunServer(filepath string, port uint) error {
 
 	addr := fmt.Sprintf(":%d", port)
 	log.Printf("starting gol server at %s.\n", addr)
-	if err := http.ListenAndServe(addr, nil); err != nil {
-		return err
-	}
-	return nil
+	return http.ListenAndServe(addr, nil)
 }

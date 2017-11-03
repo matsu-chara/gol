@@ -47,9 +47,5 @@ func RunPeco(filepath string, prefix string) error {
 		return err
 	}
 
-	if err := exec.Command("open", pecoed.Value).Run(); err != nil {
-		return err
-	}
-
-	return nil
+	return exec.Command("open", pecoed.Value).Run()
 }

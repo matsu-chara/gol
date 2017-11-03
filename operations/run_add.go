@@ -27,9 +27,5 @@ func RunAdd(filepath string, key string, value string, isForce bool) error {
 		return err
 	}
 
-	if err := db.Save(); err != nil {
-		return err
-	}
-
-	return nil
+	return db.Save()
 }
