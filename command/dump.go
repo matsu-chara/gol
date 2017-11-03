@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/codegangsta/cli"
 	"github.com/matsu-chara/gol/operations"
 	"github.com/matsu-chara/gol/util"
+	"github.com/urfave/cli"
 )
 
 // CmdDump dump

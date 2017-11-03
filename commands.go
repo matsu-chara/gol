@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/codegangsta/cli"
 	"github.com/matsu-chara/gol/command"
+	"github.com/urfave/cli"
 )
 
 // GlobalFlags are Flags

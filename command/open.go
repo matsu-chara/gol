@@ -1,9 +1,9 @@
 package command
 
 import (
-	"github.com/codegangsta/cli"
 	"github.com/matsu-chara/gol/operations/exec"
 	"github.com/matsu-chara/gol/util"
+	"github.com/urfave/cli"
 )
 
 // CmdOpen open key

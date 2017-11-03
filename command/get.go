@@ -3,9 +3,9 @@ package command
 import (
 	"fmt"
 
-	"github.com/codegangsta/cli"
 	"github.com/matsu-chara/gol/operations"
 	"github.com/matsu-chara/gol/util"
+	"github.com/urfave/cli"
 )
 
 // CmdGet get key
