@@ -15,7 +15,7 @@ var dumpTemplate = template.Must(template.New("gol").Parse(`
     <title>gol</title>
   </head>
   <body>
-	<h3>current links</h3>
+	<h3>current links (<a href="/api/dump">as json</a>)</h3>
     <ul>
       {{ range $key, $value := . }}
       <li>{{ $key }} :<a href="{{ $value }}">{{ $value }}</a></li>
