@@ -33,6 +33,10 @@ func NewGolServerHandler(filepath string) func(http.ResponseWriter, *http.Reques
 func handleGet(filepath string, w http.ResponseWriter, r *http.Request) {
 	params := strings.Split(r.URL.Path, "/")
 	if len(params) <= 1 || params[1] == "" {
+		usecase.DumpAsHTML(filepath, w)
+		return
+	}
+	if params[1] == "api" && params[2] == "dump" {
 		usecase.Dump(filepath, w)
 		return
 	}

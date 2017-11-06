@@ -59,7 +59,7 @@ func TestGolServerDump(t *testing.T) {
 	initDb(testFile)
 	handler := http.HandlerFunc(NewGolServerHandler(testFile))
 
-	req, err := http.NewRequest("GET", "/", nil)
+	req, err := http.NewRequest("GET", "/api/dump", nil)
 	if err != nil {
 		t.Errorf("create request failed %s", err)
 	}
@@ -77,6 +77,30 @@ func TestGolServerDump(t *testing.T) {
 }`
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body %v", rr.Body.String())
+	}
+
+}
+
+func TestGolServerDumpAsHTML(t *testing.T) {
+	testFile := tempTest("dumpAsHTML")
+	defer os.Remove(testFile)
+	initDb(testFile)
+	handler := http.HandlerFunc(NewGolServerHandler(testFile))
+
+	req, err := http.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+
+	if rr.HeaderMap.Get("Content-Type") != "text/html; charset=utf-8" {
+		t.Errorf("handler returned unexpected content type %v", rr.HeaderMap.Get("Content-Type"))
 	}
 
 }
