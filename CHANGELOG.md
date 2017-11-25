@@ -1,3 +1,27 @@
+## 0.4.0 (2017-11-25)
+
+add metadata(registeredBy, createdAt) for entries and drop os dependent commands(peco, open)
+
+## BC break
+
+- delete open, peco command support
+- dump cli,api return new json schema which include RegisteredBy, CreatedAt
+
+## New Feature
+
+- add `registeredBy` to link attribute
+  - for delete, same registeredBy should be passed.
+  - it is *not* secure, but it will be enough for team use.
+- api, cli's supports (optional) registeredBy parameter
+  - add $key $link [$registeredBy]
+  - curl -X POST -d "link=http://foo[&registeredBy=bar]"
+  - rm $key [$registeredBy]
+  - curl -X DELETE "http://localhost:5656/foo[?registeredBy=bar]"
+
+## Internal Change
+
+- data schema was changed.(gol will update for old schema automatically)
+
 ## 0.3.0 (2017-11-7)
 
 add get/post/delete ui
