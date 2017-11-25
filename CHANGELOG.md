@@ -1,3 +1,7 @@
+## 0.4.1 (2017-11-25)
+
+change html and css
+
 ## 0.4.0 (2017-11-25)
 
 add metadata(registeredBy, createdAt) for entries and drop os dependent commands(peco, open)

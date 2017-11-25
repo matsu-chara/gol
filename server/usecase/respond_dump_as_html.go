@@ -12,28 +12,53 @@ var dumpTemplate = template.Must(template.New("gol").Parse(`
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>gol</title>
+		<title>gol</title>
+		<style type="text/css">
+			table {
+				width: 50%;
+				border-collapse: collapse;
+  		}
+			table tr th,	table tr td {
+				border: 1px solid #EEE;
+			}
+			table tr th {
+				font-weight: bold;
+			}
+	  </style>
   </head>
-  <body>
-	<h3>current links (<a href="/api/dump">as json</a>)</h3>
-    <ul>
-      {{ range $key, $value := . }}
-      <li>{{ $key }} :<a href="{{ $value.Link }}">{{ $value.Link }}</a></li>
-      {{ end }}
-	</ul>
-	<h3>register new link</h3>
-    <form id="register-form">
-      <label>key: <input id="register-form-key" name="key" type="text" /></label>
-			<label>url: <input id="register-form-link" name="link" type="text" /></label>
-			<label>registeredBy(optional): <input id="register-form-registered-by" name="registeredBy" type="text" /></label>			
-      <input type="button" value="register" onclick="doRegister()">
-	</form>
-	<h3>delete link</h3>
-    <form id="delete-form">
-      <label>key: <input id="delete-form-key" name="key" type="text" /></label>
-			<label>registeredBy(optional): <input id="delete-form-registered-by" name="registeredBy" type="text" /></label>						
-			<input type="button" value="delete" onclick="doDelete()">
-	</form>
+	<body>
+		<div class="container">
+			<h3>current links (<a href="/api/dump">as json</a>)</h3>
+			<table>
+				<thead>
+					<tr>
+						<th>Key</th>
+						<th>Link</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{ range $key, $value := . }}
+					<tr>
+						<td>{{ $key }}</td>
+						<td><a href="{{ $value.Link }}">{{ $value.Link }}</a></td>
+					</tr>
+					{{ end }}
+				</tbody>
+			</table>
+			<h3>register new link</h3>
+			<form id="register-form">
+				<label>key: <input id="register-form-key" name="key" type="text" /></label>
+				<label>url: <input id="register-form-link" name="link" type="text" /></label>
+				<label>registeredBy(optional): <input id="register-form-registered-by" name="registeredBy" type="text" /></label>
+				<input type="button" value="register" onclick="doRegister()">
+			</form>
+			<h3>delete link</h3>
+			<form id="delete-form">
+				<label>key: <input id="delete-form-key" name="key" type="text" /></label>
+				<label>registeredBy(optional): <input id="delete-form-registered-by" name="registeredBy" type="text" /></label>
+				<input type="button" value="delete" onclick="doDelete()">
+			</form>
+		</div>
     <script type="text/javascript">
       function doRegister(){
     	let keyInput = document.getElementById("register-form-key");
