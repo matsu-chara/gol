@@ -1,6 +1,8 @@
 package operations
 
 import (
+	"github.com/matsu-chara/gol/kvs"
+
 	"os"
 	"reflect"
 	"testing"
@@ -19,7 +21,7 @@ func TestRunDump(t *testing.T) {
 		t.Errorf("dump error %s", err)
 	}
 
-	if !reflect.DeepEqual(result, map[string]string{"k1": "v1", "k2": "v2"}) {
+	if !reflect.DeepEqual(result, map[string]kvs.Value{"k1": {Link: "v1"}, "k2": {Link: "v2"}}) {
 		t.Errorf("unexpected result %s", result)
 	}
 }

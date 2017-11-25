@@ -2,10 +2,16 @@ package operations
 
 import (
 	"github.com/matsu-chara/gol/kvs"
+	"time"
 )
 
 // RunAdd run add
-func RunAdd(filepath string, key string, value string, isForce bool) error {
+func RunAdd(filepath string, key string, link string, registeredBy string, isForce bool) error {
+	value := kvs.Value{
+		Link:         link,
+		RegisteredBy: registeredBy,
+		CreatedAt:    time.Now(),
+	}
 	entry, err := kvs.NewEntry(key, value)
 	if err != nil {
 		return err
@@ -20,7 +26,10 @@ func RunAdd(filepath string, key string, value string, isForce bool) error {
 	}
 
 	if isForce {
-		db.Remove(key)
+		err = db.Remove(key, registeredBy)
+		if err != nil {
+			return err
+		}
 	}
 
 	if err := db.Put(entry); err != nil {

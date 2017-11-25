@@ -7,7 +7,7 @@ import (
 )
 
 // Post adds new key value
-func Post(filepath string, key string, value string, isForce bool, w http.ResponseWriter, r *http.Request) {
+func Post(filepath string, key string, link string, registeredBy string, isForce bool, w http.ResponseWriter, r *http.Request) {
 	if !isForce {
 		entry, err := operations.RunGet(filepath, key)
 		if err != nil {
@@ -21,7 +21,7 @@ func Post(filepath string, key string, value string, isForce bool, w http.Respon
 		}
 	}
 
-	err := operations.RunAdd(filepath, key, value, isForce)
+	err := operations.RunAdd(filepath, key, link, registeredBy, isForce)
 	if err != nil {
 		respondInternalServerError(err, w)
 		return

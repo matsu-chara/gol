@@ -10,9 +10,10 @@ import (
 func CmdAdd(c *cli.Context) {
 	filepath := c.GlobalString("datapath")
 	key := c.Args().Get(0)
-	value := c.Args().Get(1)
+	link := c.Args().Get(1)
+	registeredBy := c.Args().Get(2)
 	isForce := c.Bool("force")
 
-	err := operations.RunAdd(filepath, key, value, isForce)
+	err := operations.RunAdd(filepath, key, link, registeredBy, isForce)
 	util.ExitIfError(err)
 }

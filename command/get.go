@@ -14,9 +14,9 @@ func CmdGet(c *cli.Context) {
 	key := c.Args().Get(0)
 
 	entry, err := operations.RunGet(filepath, key)
+	util.ExitIfError(err)
 	if entry == nil {
 		return
 	}
-	util.ExitIfError(err)
-	fmt.Println(entry.Value)
+	fmt.Println(entry.Value.Link)
 }

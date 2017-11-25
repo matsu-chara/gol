@@ -18,7 +18,7 @@ func TestRunGet(t *testing.T) {
 	if err != nil {
 		t.Errorf("get error %s", err)
 	}
-	if result.Value != "v1" {
+	if result.Value.Link != "v1" {
 		t.Errorf("unexpected value %s", result)
 	}
 }

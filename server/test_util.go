@@ -16,7 +16,8 @@ func initDb(testFile string) error {
 	if err != nil {
 		return err
 	}
-	entry, err := kvs.NewEntry("k1", "http://test/v1")
+
+	entry, err := kvs.NewEntry("k1", kvs.Value{Link: "http://test/v1"})
 	if err != nil {
 		return err
 	}
@@ -24,7 +25,7 @@ func initDb(testFile string) error {
 	if err != nil {
 		return err
 	}
-	entry2, err := kvs.NewEntry("k2", "http://v2")
+	entry2, err := kvs.NewEntry("k2", kvs.Value{Link: "http://v2"})
 	if err != nil {
 		return err
 	}

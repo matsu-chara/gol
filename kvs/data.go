@@ -3,11 +3,19 @@ package kvs
 import (
 	"fmt"
 	"sort"
+	"time"
 )
+
+// Value in kvs
+type Value struct {
+	Link         string
+	RegisteredBy string
+	CreatedAt    time.Time
+}
 
 // Data in kvs
 type Data struct {
-	data map[string]string
+	data map[string]Value
 }
 
 // Get key from data
@@ -29,7 +37,7 @@ func (data *Data) Get(key string) (*Entry, bool) {
 func (data *Data) Put(entry *Entry) error {
 	oldValue, ok := data.Get(entry.Key)
 	if ok {
-		return fmt.Errorf("%s is already registered as %s", entry.Key, oldValue)
+		return fmt.Errorf("%s is already registered as %s by %s", entry.Key, oldValue.Value.Link, oldValue.Value.RegisteredBy)
 	}
 
 	data.data[entry.Key] = entry.Value
@@ -37,8 +45,18 @@ func (data *Data) Put(entry *Entry) error {
 }
 
 // Remove key from data.
-func (data *Data) Remove(key string) {
+func (data *Data) Remove(key string, registeredBy string) error {
+	if _, ok := data.data[key]; !ok {
+		return nil
+	}
+	entryRegisteredBy := data.data[key].RegisteredBy
+
+	if registeredBy != entryRegisteredBy {
+		return fmt.Errorf("registeredBy was not equal to \"%s\"", data.data[key].RegisteredBy)
+	}
+
 	delete(data.data, key)
+	return nil
 }
 
 // ListKeys return all keys in data.
@@ -61,6 +79,6 @@ func (data *Data) List() []Entry {
 }
 
 // Dump data.
-func (data *Data) Dump() map[string]string {
+func (data *Data) Dump() map[string]Value {
 	return data.data
 }

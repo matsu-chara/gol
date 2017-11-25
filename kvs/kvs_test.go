@@ -37,7 +37,7 @@ func TestSave(t *testing.T) {
 		t.Error("kvs was nil")
 	}
 
-	err2 := kvs.Put(&Entry{Key: "k_test", Value: "v1"})
+	err2 := kvs.Put(&Entry{Key: "k_test", Value: Value{Link: "v1"}})
 	if err2 != nil {
 		t.Errorf("put failed %s", err2)
 	}
@@ -57,7 +57,7 @@ func TestSave(t *testing.T) {
 	if !isExist {
 		t.Error("save was ignored")
 	}
-	if (*entry != Entry{Key: "k_test", Value: "v1"}) {
+	if (*entry != Entry{Key: "k_test", Value: Value{Link: "v1"}}) {
 		t.Errorf("unexpected entry %s", entry)
 	}
 }

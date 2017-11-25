@@ -19,7 +19,7 @@ func Get(filepath string, key string, params []string, w http.ResponseWriter, r 
 		return
 	}
 
-	newURL := strings.Join(append([]string{entry.Value}, params...), "/")
+	newURL := strings.Join(append([]string{entry.Value.Link}, params...), "/")
 	http.Redirect(w, r, newURL, http.StatusSeeOther)
 
 	return

@@ -56,14 +56,18 @@ func handlePost(filepath string, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	key := params[1]
-	value := r.PostFormValue("value")
-	if value == "" {
+	link := r.PostFormValue("link")
+	if link == "" {
+		link = r.PostFormValue("value") // for api compatibility from v0.3.0
+	}
+	if link == "" {
 		http.Error(w, "Error: value is empty. please specify value in POST body and set Content-Type application/x-www-form-urlencoded", http.StatusBadRequest)
 		return
 	}
+	registeredBy := r.PostFormValue("registeredBy")
 	isForce := (r.PostFormValue("force") == "true")
 
-	usecase.Post(filepath, key, value, isForce, w, r)
+	usecase.Post(filepath, key, link, registeredBy, isForce, w, r)
 	return
 }
 
@@ -76,7 +80,8 @@ func handleDelete(filepath string, w http.ResponseWriter, r *http.Request) {
 	}
 	key := params[1]
 
-	usecase.Delete(filepath, key, w, r)
+	registeredBy := r.URL.Query().Get("registeredBy")
+	usecase.Delete(filepath, key, registeredBy, w, r)
 	return
 }
 

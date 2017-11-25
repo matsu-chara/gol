@@ -55,18 +55,6 @@ var Commands = []cli.Command{
 		Flags:     []cli.Flag{},
 	},
 	{
-		Name:      "open",
-		ShortName: "o",
-		Action:    command.CmdOpen,
-		Flags:     []cli.Flag{},
-	},
-	{
-		Name:      "peco",
-		ShortName: "p",
-		Action:    command.CmdPeco,
-		Flags:     []cli.Flag{},
-	},
-	{
 		Name:      "server",
 		ShortName: "s",
 		Action:    command.CmdServer,

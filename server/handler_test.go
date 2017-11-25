@@ -72,8 +72,16 @@ func TestGolServerDump(t *testing.T) {
 	}
 
 	expected := `{
-	"k1": "http://test/v1",
-	"k2": "http://v2"
+	"k1": {
+		"Link": "http://test/v1",
+		"RegisteredBy": "",
+		"CreatedAt": "0001-01-01T00:00:00Z"
+	},
+	"k2": {
+		"Link": "http://v2",
+		"RegisteredBy": "",
+		"CreatedAt": "0001-01-01T00:00:00Z"
+	}
 }`
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body %v", rr.Body.String())

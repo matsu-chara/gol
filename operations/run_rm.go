@@ -3,7 +3,7 @@ package operations
 import "github.com/matsu-chara/gol/kvs"
 
 // RunRm run rm
-func RunRm(filepath string, key string) error {
+func RunRm(filepath string, key string, registeredBy string) error {
 	db, err := kvs.Open(filepath)
 	defer func() {
 		db.Close()
@@ -12,6 +12,9 @@ func RunRm(filepath string, key string) error {
 		return err
 	}
 
-	db.Remove(key)
+	err = db.Remove(key, registeredBy)
+	if err != nil {
+		return err
+	}
 	return db.Save()
 }

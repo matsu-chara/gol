@@ -7,7 +7,7 @@ import (
 )
 
 func TestGet(t *testing.T) {
-	values := map[string]string{"k1": "v1", "k2": "v2"}
+	values := map[string]Value{"k1": {Link: "v1"}, "k2": {Link: "v2"}}
 	data := Data{
 		data: values,
 	}
@@ -21,7 +21,7 @@ func TestGet(t *testing.T) {
 		t.Errorf("%s is not expected key `k1`", result)
 	}
 
-	if result.Value != "v1" {
+	if result.Value.Link != "v1" {
 		t.Errorf("%s is not expected value `v1`", result)
 	}
 
@@ -36,29 +36,31 @@ func TestGet(t *testing.T) {
 }
 
 func TestPut(t *testing.T) {
-	values := map[string]string{"k1": "v1", "k2": "v2"}
+	values := map[string]Value{"k1": {Link: "v1"}, "k2": {Link: "v2"}}
 	data := Data{
 		data: values,
 	}
 
 	err := data.Put(&Entry{
 		Key:   "k3",
-		Value: "v3",
+		Value: Value{Link: "v3", RegisteredBy: "r3"},
 	})
 	if err != nil {
 		t.Error("put was failed")
 	}
 	result, isExists := data.Get("k3")
 	if !isExists {
-		t.Error("k1 was not found.")
+		t.Error("k3 was not found.")
 	}
-	if result.Value != "v3" {
-		t.Error("k3 value was wrong")
+	if result.Value.Link != "v3" {
+		t.Error("k3 link was wrong")
 	}
-
+	if result.Value.RegisteredBy != "r3" {
+		t.Error("k3 registeredBy was wrong")
+	}
 	err2 := data.Put(&Entry{
 		Key:   "k1",
-		Value: "v0",
+		Value: Value{Link: "v0"},
 	})
 	if err2 == nil {
 		t.Error("k1 was already registered but not erro")
@@ -66,20 +68,37 @@ func TestPut(t *testing.T) {
 }
 
 func TestRemove(t *testing.T) {
-	values := map[string]string{"k1": "v1", "k2": "v2"}
+	values := map[string]Value{"k1": {Link: "v1"}, "k2": {Link: "v2"}}
 	data := Data{
 		data: values,
 	}
 
-	data.Remove("k1")
+	data.Remove("k1", "")
 	_, isExists := data.Get("k1")
 	if isExists {
 		t.Error("k1 was found.")
 	}
+
+	err := data.Put(&Entry{
+		Key:   "k3",
+		Value: Value{Link: "v3", RegisteredBy: "r3"},
+	})
+	if err != nil {
+		t.Error("put was failed")
+	}
+	err = data.Remove("k3", "")
+	if err == nil {
+		t.Error("registeredBy was not equal but no error")
+	}
+	data.Remove("k3", "r3")
+	_, isExists = data.Get("k3")
+	if isExists {
+		t.Error("k3 was found.")
+	}
 }
 
 func TestListKeys(t *testing.T) {
-	values := map[string]string{"k1": "v1", "k2": "v2"}
+	values := map[string]Value{"k1": {Link: "v1"}, "k2": {Link: "v2"}}
 	data := Data{
 		data: values,
 	}
@@ -91,21 +110,21 @@ func TestListKeys(t *testing.T) {
 }
 
 func TestList(t *testing.T) {
-	values := map[string]string{"k1": "v1", "k2": "v2"}
+	values := map[string]Value{"k1": {Link: "v1"}, "k2": {Link: "v2"}}
 	data := Data{
 		data: values,
 	}
 	keys := data.List()
 	if !reflect.DeepEqual(keys, []Entry{
-		{Key: "k1", Value: "v1"},
-		{Key: "k2", Value: "v2"},
+		{Key: "k1", Value: Value{Link: "v1"}},
+		{Key: "k2", Value: Value{Link: "v2"}},
 	}) {
 		t.Errorf("keys are not equal %s", keys)
 	}
 }
 
 func TestDump(t *testing.T) {
-	values := map[string]string{"k1": "v1", "k2": "v2"}
+	values := map[string]Value{"k1": {Link: "v1"}, "k2": {Link: "v2"}}
 	data := Data{
 		data: values,
 	}
