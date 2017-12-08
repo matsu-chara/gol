@@ -34,11 +34,6 @@ https://dev.jenkins.nice-company.com/
 
 $ gol rm consul_prod
 $ gol get consul_prod
-
-$ gol open myteamdocs
-# open in browser (need open command)
-$ gol peco jenkins
-# search jenkins* and select in peco and open in browser (need peco and open command)
 ```
 
 ### in browser
