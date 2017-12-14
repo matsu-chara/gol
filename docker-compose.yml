@@ -9,4 +9,9 @@ services:
       - '5656:5656'
     volumes:
       - "$HOME/.config/gol:/go/src/app/data"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "30m"
+        max-file: "3"
     command: "--datapath /go/src/app/data/links.json server"
