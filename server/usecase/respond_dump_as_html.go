@@ -50,6 +50,7 @@ var dumpTemplate = template.Must(template.New("gol").Parse(`
 				<label>key: <input id="register-form-key" name="key" type="text" /></label>
 				<label>url: <input id="register-form-link" name="link" type="text" /></label>
 				<label>registeredBy(optional): <input id="register-form-registered-by" name="registeredBy" type="text" /></label>
+				<label>overwrite: <input id="register-overwrite-is-force" name="is-overwrite" type="checkbox" value="on"/></label>
 				<input type="button" value="register" onclick="doRegister()">
 			</form>
 			<h3>delete link</h3>
@@ -63,14 +64,15 @@ var dumpTemplate = template.Must(template.New("gol").Parse(`
       function doRegister(){
     	let keyInput = document.getElementById("register-form-key");
     	let linkInput = document.getElementById("register-form-link");
-			let registeredByInput = document.getElementById("register-form-registered-by");
-			
+		let registeredByInput = document.getElementById("register-form-registered-by");
+		let isOverwriteInput = document.getElementById("register-overwrite-is-force");
+
 		var req = new XMLHttpRequest();
 		req.onreadystatechange = function() {
 		  if (req.readyState == 4) {
 			if (req.status == 201) {
 			  location.reload();
-			} else {	
+			} else {
 			  console.error("registration failed. status: " + req.status + ", response:" + req.response);
 			  alert("registration failed. status: " + req.status + ", response:" + req.response);
 			}
@@ -78,7 +80,7 @@ var dumpTemplate = template.Must(template.New("gol").Parse(`
 		};
 		req.open("POST", "/" + keyInput.value, true);
 		req.setRequestHeader("content-type", "application/x-www-form-urlencoded");
-		req.send("link=" + encodeURIComponent(linkInput.value) + "&registeredBy=" + encodeURIComponent(registeredByInput.value));
+		req.send("link=" + encodeURIComponent(linkInput.value) + "&force=" + (isOverwriteInput.checked).toString() + "&registeredBy=" + encodeURIComponent(registeredByInput.value));
     }
 	function doDelete(){
     	let keyInput = document.getElementById("delete-form-key");
@@ -89,7 +91,7 @@ var dumpTemplate = template.Must(template.New("gol").Parse(`
 		  if (req.readyState == 4) {
 			if (req.status == 200) {
 			  location.reload();
-			} else {	
+			} else {
 			  console.error("deletion failed. status: " + req.status + ", response:" + req.response);
 			  alert("deletion failed. status: " + req.status + ", response:" + req.response);
 			}
