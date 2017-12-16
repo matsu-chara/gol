@@ -211,6 +211,53 @@ func TestGolServerReplaceSameElementWhenPostWithForceFlag(t *testing.T) {
 	}
 }
 
+func TestGolServerReplaceSameElementWhenPostWithForceFlagAndRegisteredBy(t *testing.T) {
+	testURL := "http://test/v1"
+	testRegisteredBy := "foo"
+
+	testFile := tempTest("post")
+	defer os.Remove(testFile)
+	initDb(testFile)
+	handler := http.HandlerFunc(NewGolServerHandler(testFile))
+
+	req, err := http.NewRequest("POST", "/registered_test", strings.NewReader(fmt.Sprintf("value=%s&force=true&registeredBy=%s", testURL, testRegisteredBy)))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusCreated {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+
+	req, err = http.NewRequest("POST", "/registered_test", strings.NewReader(fmt.Sprintf("value=%s&force=true&registeredBy=%s", testURL, testRegisteredBy)))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+	if status := rr.Code; status != http.StatusCreated {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+
+	req, err = http.NewRequest("POST", "/registered_test", strings.NewReader(fmt.Sprintf("value=%s&force=true&registeredBy=%s", testURL, "wrong_registered_by")))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if err != nil {
+		t.Errorf("create request failed %s", err)
+	}
+
+	rr = httptest.NewRecorder()
+	handler.ServeHTTP(rr, req)
+	if status := rr.Code; status != http.StatusBadRequest {
+		t.Errorf("handler returned wrong status code: got %v", status)
+	}
+}
+
 func TestGolServerCannotPostWithKeyWhichContainsSlash(t *testing.T) {
 	testFile := tempTest("post")
 	defer os.Remove(testFile)
