@@ -1,3 +1,7 @@
+## 0.4.2 (2017-12-16)
+
+support force in html page
+
 ## 0.4.1 (2017-11-25)
 
 change html and css
