@@ -3,15 +3,7 @@ package kvs
 import (
 	"fmt"
 	"sort"
-	"time"
 )
-
-// Value in kvs
-type Value struct {
-	Link         string
-	RegisteredBy string
-	CreatedAt    time.Time
-}
 
 // Data in kvs
 type Data struct {
@@ -49,9 +41,8 @@ func (data *Data) Remove(key string, registeredBy string) error {
 	if _, ok := data.data[key]; !ok {
 		return nil
 	}
-	entryRegisteredBy := data.data[key].RegisteredBy
 
-	if registeredBy != entryRegisteredBy {
+	if !data.data[key].IsRegisteredBy(registeredBy) {
 		return fmt.Errorf("registeredBy was not equal to \"%s\"", data.data[key].RegisteredBy)
 	}
 
