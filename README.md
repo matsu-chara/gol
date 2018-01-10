@@ -7,7 +7,7 @@ gol(go link) is a url shortner that run in cli and browser.
 
 ## Install
 
-To install, use `go get`:
+To install, use `go get` or [dockerhub](https://hub.docker.com/r/matsuchara/gol/)
 
 ```bash
 $ go get github.com/matsu-chara/gol
