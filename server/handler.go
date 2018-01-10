@@ -13,10 +13,10 @@ func NewGolServerHandler(filepath string) func(http.ResponseWriter, *http.Reques
 			lockCtx.RLock()
 			defer lockCtx.RUnlock()
 			handleGet(filepath, w, r)
-		} else if r.Method == "POST" {
+		} else if r.Method == "PUT" {
 			lockCtx.Lock()
 			defer lockCtx.Unlock()
-			handlePost(filepath, w, r)
+			handlePut(filepath, w, r)
 		} else if r.Method == "DELETE" {
 			lockCtx.Lock()
 			defer lockCtx.Unlock()
@@ -49,7 +49,7 @@ func handleGet(filepath string, w http.ResponseWriter, r *http.Request) {
 }
 
 // put key and value from form url encoded parameter. format: value=foo
-func handlePost(filepath string, w http.ResponseWriter, r *http.Request) {
+func handlePut(filepath string, w http.ResponseWriter, r *http.Request) {
 	params := strings.Split(r.URL.Path, "/")
 	if len(params) != 2 {
 		http.Error(w, "Error: key contains '/'. please specify key without '/'", http.StatusBadRequest)
@@ -61,13 +61,13 @@ func handlePost(filepath string, w http.ResponseWriter, r *http.Request) {
 		link = r.PostFormValue("value") // for api compatibility from v0.3.0
 	}
 	if link == "" {
-		http.Error(w, "Error: value is empty. please specify value in POST body and set Content-Type application/x-www-form-urlencoded", http.StatusBadRequest)
+		http.Error(w, "Error: value is empty. please specify value in body and set Content-Type application/x-www-form-urlencoded", http.StatusBadRequest)
 		return
 	}
 	registeredBy := r.PostFormValue("registeredBy")
 	isForce := (r.PostFormValue("force") == "true")
 
-	usecase.Post(filepath, key, link, registeredBy, isForce, w, r)
+	usecase.Put(filepath, key, link, registeredBy, isForce, w, r)
 	return
 }
 

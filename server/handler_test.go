@@ -113,15 +113,15 @@ func TestGolServerDumpAsHTML(t *testing.T) {
 
 }
 
-func TestGolServerPost(t *testing.T) {
+func TestGolServerPut(t *testing.T) {
 	testURL := "http://test/v1"
 
-	testFile := tempTest("post")
+	testFile := tempTest("put")
 	defer os.Remove(testFile)
 	initDb(testFile)
 	handler := http.HandlerFunc(NewGolServerHandler(testFile))
 
-	req, err := http.NewRequest("POST", "/newItem", strings.NewReader(fmt.Sprintf("value=%s", testURL)))
+	req, err := http.NewRequest("PUT", "/newItem", strings.NewReader(fmt.Sprintf("value=%s", testURL)))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		t.Errorf("create request failed %s", err)
@@ -152,13 +152,13 @@ func TestGolServerPost(t *testing.T) {
 	}
 }
 
-func TestGolServerCannotPostSameElement(t *testing.T) {
-	testFile := tempTest("post")
+func TestGolServerCannotPut(t *testing.T) {
+	testFile := tempTest("put")
 	defer os.Remove(testFile)
 	initDb(testFile)
 	handler := http.HandlerFunc(NewGolServerHandler(testFile))
 
-	req, err := http.NewRequest("POST", "/k1", strings.NewReader("value=http://test/v1"))
+	req, err := http.NewRequest("PUT", "/k1", strings.NewReader("value=http://test/v1"))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		t.Errorf("create request failed %s", err)
@@ -172,15 +172,15 @@ func TestGolServerCannotPostSameElement(t *testing.T) {
 	}
 }
 
-func TestGolServerReplaceSameElementWhenPostWithForceFlag(t *testing.T) {
+func TestGolServerReplaceSameElementWhenPut(t *testing.T) {
 	testURL := "http://test/v1"
 
-	testFile := tempTest("post")
+	testFile := tempTest("put")
 	defer os.Remove(testFile)
 	initDb(testFile)
 	handler := http.HandlerFunc(NewGolServerHandler(testFile))
 
-	req, err := http.NewRequest("POST", "/k1", strings.NewReader(fmt.Sprintf("value=%s&force=true", testURL)))
+	req, err := http.NewRequest("PUT", "/k1", strings.NewReader(fmt.Sprintf("value=%s&force=true", testURL)))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		t.Errorf("create request failed %s", err)
@@ -211,16 +211,16 @@ func TestGolServerReplaceSameElementWhenPostWithForceFlag(t *testing.T) {
 	}
 }
 
-func TestGolServerReplaceSameElementWhenPostWithForceFlagAndRegisteredBy(t *testing.T) {
+func TestGolServerReplaceSameElementWhenPutWithForceFlagAndRegisteredBy(t *testing.T) {
 	testURL := "http://test/v1"
 	testRegisteredBy := "foo"
 
-	testFile := tempTest("post")
+	testFile := tempTest("put")
 	defer os.Remove(testFile)
 	initDb(testFile)
 	handler := http.HandlerFunc(NewGolServerHandler(testFile))
 
-	req, err := http.NewRequest("POST", "/registered_test", strings.NewReader(fmt.Sprintf("value=%s&force=true&registeredBy=%s", testURL, testRegisteredBy)))
+	req, err := http.NewRequest("PUT", "/registered_test", strings.NewReader(fmt.Sprintf("value=%s&force=true&registeredBy=%s", testURL, testRegisteredBy)))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		t.Errorf("create request failed %s", err)
@@ -233,7 +233,7 @@ func TestGolServerReplaceSameElementWhenPostWithForceFlagAndRegisteredBy(t *test
 		t.Errorf("handler returned wrong status code: got %v", status)
 	}
 
-	req, err = http.NewRequest("POST", "/registered_test", strings.NewReader(fmt.Sprintf("value=%s&force=true&registeredBy=%s", testURL, testRegisteredBy)))
+	req, err = http.NewRequest("PUT", "/registered_test", strings.NewReader(fmt.Sprintf("value=%s&force=true&registeredBy=%s", testURL, testRegisteredBy)))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		t.Errorf("create request failed %s", err)
@@ -245,7 +245,7 @@ func TestGolServerReplaceSameElementWhenPostWithForceFlagAndRegisteredBy(t *test
 		t.Errorf("handler returned wrong status code: got %v", status)
 	}
 
-	req, err = http.NewRequest("POST", "/registered_test", strings.NewReader(fmt.Sprintf("value=%s&force=true&registeredBy=%s", testURL, "wrong_registered_by")))
+	req, err = http.NewRequest("PUT", "/registered_test", strings.NewReader(fmt.Sprintf("value=%s&force=true&registeredBy=%s", testURL, "wrong_registered_by")))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		t.Errorf("create request failed %s", err)
@@ -258,13 +258,13 @@ func TestGolServerReplaceSameElementWhenPostWithForceFlagAndRegisteredBy(t *test
 	}
 }
 
-func TestGolServerCannotPostWithKeyWhichContainsSlash(t *testing.T) {
-	testFile := tempTest("post")
+func TestGolServerCannotPutWithKeyWhichContainsSlash(t *testing.T) {
+	testFile := tempTest("put")
 	defer os.Remove(testFile)
 	initDb(testFile)
 	handler := http.HandlerFunc(NewGolServerHandler(testFile))
 
-	req, err := http.NewRequest("POST", "/k1/", nil)
+	req, err := http.NewRequest("PUT", "/k1/", nil)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		t.Errorf("create request failed %s", err)
@@ -334,7 +334,7 @@ func TestGolServerUnSupportedMethod(t *testing.T) {
 	initDb(testFile)
 	handler := http.HandlerFunc(NewGolServerHandler(testFile))
 
-	req, err := http.NewRequest("PUT", "/k1/test/test", nil)
+	req, err := http.NewRequest("OPTIONS", "/k1/test/test", nil)
 	if err != nil {
 		t.Errorf("create request failed %s", err)
 	}

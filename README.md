@@ -41,13 +41,13 @@ access `http://localhost:5656/api/dump` dumps all links.
 
 access `http://localhost:5656/${key}` will return redirect response destinating to the `${value}`
 
-##### post
+##### put
 
-`curl -d value=${some_url} http://localhost:5656/${key}"` will add a link to key
+`curl -X PUT -d value=${some_url} http://localhost:5656/${key}"` will add a link to key
 
-`curl -d "value=${some_url}&force=true" http://localhost:5656/${key}` will add a link to key (if replace key when conflict)
+`curl -X PUT -d "value=${some_url}&force=true" http://localhost:5656/${key}` will add a link to key (if replace key when conflict)
 
-`curl -d "value=${some_url}&registeredBy=bar" http://localhost:5656/${key}` will add a link to key with a registeredBy "bar".
+`curl -X PUT -d "value=${some_url}&registeredBy=bar" http://localhost:5656/${key}` will add a link to key with a registeredBy "bar".
 
 ##### delete
 

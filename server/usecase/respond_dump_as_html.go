@@ -117,7 +117,7 @@ var dumpTemplate = template.Must(template.New("gol").Parse(`
           }
         }
       };
-      req.open("POST", "/" + keyInput.value, true);
+      req.open("PUT", "/" + keyInput.value, true);
       req.setRequestHeader("content-type", "application/x-www-form-urlencoded");
       req.send("link=" + encodeURIComponent(linkInput.value) + "&force=" + (isOverwriteInput.checked).toString() + "&registeredBy=" + encodeURIComponent(registeredByInput.value));
     }

@@ -6,8 +6,8 @@ import (
 	"github.com/matsu-chara/gol/operations"
 )
 
-// Post adds ew key value
-func Post(filepath string, key string, link string, registeredBy string, isForce bool, w http.ResponseWriter, r *http.Request) {
+// Put adds ew key value
+func Put(filepath string, key string, link string, registeredBy string, isForce bool, w http.ResponseWriter, r *http.Request) {
 	entry, err := operations.RunGet(filepath, key)
 	if err != nil {
 		respondInternalServerError(err, w)
