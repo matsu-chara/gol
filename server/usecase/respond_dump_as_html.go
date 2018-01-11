@@ -84,11 +84,11 @@ var dumpTemplate = template.Must(template.New("gol").Parse(`
       <form id="delete-form" class="col s12">
         <div class="row">
           <div class="input-field col s4">
-            <input id="delete-form-key" type="text" />
+            <input id="delete-form-key" type="text" placeholder="short_name"/>
             <label for="delete-form-key">key</label>
           </div>
           <div class="input-field col s4">
-            <input id="delete-form-registered-by" name="registeredBy" type="text" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="The name you specified when you registered. Deletion will fail if a different name is specified" />
+            <input id="delete-form-registered-by" name="registeredBy" type="text" placeholder="register user name" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="The name you specified when you registered. Deletion will fail if a different name is specified" />
             <label for="delete-form-registered-by">registeredBy</label>
           </div>
         </div>
