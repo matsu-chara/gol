@@ -1,4 +1,4 @@
-FROM golang:1.8.3-alpine
+FROM golang:1.9.3-alpine
 MAINTAINER matsu-chara <matsuy00@gmail.com>
 
 WORKDIR /go/src/github.com/matsu-chara/gol
