@@ -1,5 +1,4 @@
 BIN_NAME=gol
-BUILD_VERSION=latest
 
 ci: clean devdeps dep lint build test
 
@@ -29,6 +28,9 @@ fmt:
 	gofmt -s -w .
 
 release:
+	$(eval BUILD_VERSION_WITHOUT_V := $(shell echo $(BUILD_VERSION) | tr -d 'v'))
+	sed -i '' -E 's/Version string =.+/Version string = "$(BUILD_VERSION_WITHOUT_V)"/' version.go
+	git add version.go
+	git commit -m 'release $(BUILD_VERSION)'
 	git tag $(BUILD_VERSION)
 	git push origin $(BUILD_VERSION)
-
