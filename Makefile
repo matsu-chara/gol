@@ -34,3 +34,5 @@ release:
 	git commit -m 'release $(BUILD_VERSION)'
 	git tag $(BUILD_VERSION)
 	git push origin $(BUILD_VERSION)
+	@echo "===> please publish new release"
+	open https://github.com/matsu-chara/gol/releases/new
