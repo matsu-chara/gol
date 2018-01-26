@@ -17,13 +17,13 @@ dep:
 lint:
 	test -z "$$(gofmt -s -d .)" || (gofmt -s -d .; exit 1)
 	go vet ./...
-	golint -set_exit_status $$(go list ./... | grep -v /vendor/)
+	golint -set_exit_status $$(go list ./...)
 
 build:
 	go build
 
 test:
-	go test $$(go list ./... | grep -v /vendor/)
+	go test ./...
 
 fmt:
 	gofmt -s -w .
