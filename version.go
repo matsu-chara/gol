@@ -4,4 +4,4 @@ package main
 const Name string = "gol"
 
 // Version of this tool
-const Version string = "0.1.0"
+const Version string = "0.6.0"
