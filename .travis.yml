@@ -5,9 +5,4 @@ install:
   - go get github.com/golang/lint/golint
 
 script:
-  - dep ensure
-  - gofmt -s -d . | xargs -r false
-  - go build
-  - go vet ./...
-  - golint $(go list ./... | grep -v /vendor/) | xargs -r false
-  - go test $(go list ./... | grep -v /vendor/)
+  - make ci
