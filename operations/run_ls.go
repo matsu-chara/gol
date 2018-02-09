@@ -6,10 +6,8 @@ import (
 
 // RunLs run ls
 func RunLs(filepath string) ([]kvs.Entry, error) {
-	db, err := kvs.Open(filepath)
-	defer func() {
-		db.Close()
-	}()
+	db, err := kvs.Open(filepath, kvs.ReadOnly)
+	defer db.Close()
 	if err != nil {
 		return nil, err
 	}

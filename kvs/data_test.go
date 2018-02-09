@@ -38,7 +38,8 @@ func TestGet(t *testing.T) {
 func TestPut(t *testing.T) {
 	values := map[string]Value{"k1": {Link: "v1"}, "k2": {Link: "v2"}}
 	data := Data{
-		data: values,
+		data:       values,
+		permission: ReadAndWrite,
 	}
 
 	err := data.Put(&Entry{
@@ -70,7 +71,8 @@ func TestPut(t *testing.T) {
 func TestRemove(t *testing.T) {
 	values := map[string]Value{"k1": {Link: "v1"}, "k2": {Link: "v2"}}
 	data := Data{
-		data: values,
+		data:       values,
+		permission: ReadAndWrite,
 	}
 
 	data.Remove("k1", "")

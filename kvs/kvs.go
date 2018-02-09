@@ -13,8 +13,7 @@ import (
 // KVS which have data and metadata
 type KVS struct {
 	filename string
-	Data
-	mutex sync.Mutex
+	*Data
 }
 
 const (
@@ -22,8 +21,27 @@ const (
 	filePermission = 0644
 )
 
+// for inmemory cache.
+// this will shared by only same process. so, CLI will be unaffected by this cache & lock.
+var inMemoryCacheLock sync.RWMutex
+var inMemoryCache *Data
+
 // Open returns KVS data and metadata.
-func Open(filename string) (*KVS, error) {
+func Open(filename string, permission Permission) (*KVS, error) {
+	switch permission {
+	case ReadOnly:
+		inMemoryCacheLock.RLock() // prevent read file, during writing file. will release in Close method
+		if inMemoryCache != nil {
+			kvs := KVS{
+				filename,
+				inMemoryCache,
+			}
+			return &kvs, nil // return cache
+		}
+	case ReadAndWrite:
+		inMemoryCacheLock.Lock() // will release in Close method
+		inMemoryCache = nil
+	}
 	if err := prepareFile(filename); err != nil {
 		return nil, err
 	}
@@ -39,22 +57,23 @@ func Open(filename string) (*KVS, error) {
 		return nil, err
 	}
 
-	data, err := toData(values)
+	data, err := toData(values, permission)
 	if err != nil {
 		return nil, err
 	}
 
 	kvs := KVS{
 		filename: filename,
-		Data:     data,
+		Data:     &data,
 	}
 	return &kvs, nil
 }
 
 // Save all data.
 func (kvs *KVS) Save() error {
-	kvs.mutex.Lock()
-	defer kvs.mutex.Unlock()
+	if kvs.Data.permission != ReadAndWrite {
+		return errors.New("save error. kvs was opend with ReadOnly Permission")
+	}
 
 	newJSON, err := json.Marshal(kvs.data)
 	if err != nil {
@@ -66,17 +85,27 @@ func (kvs *KVS) Save() error {
 		return err
 	}
 
-	kvs.Close()
+	// update inmemory cache
+	inMemoryCache = &Data{
+		data:       kvs.Data.data,
+		permission: ReadOnly, // as read only kvs
+	}
 	return nil
 }
 
 // Close KVS (currently do nothing)
 func (kvs *KVS) Close() {
-	// do nothing
+	switch kvs.Data.permission {
+	case ReadOnly:
+		inMemoryCacheLock.RUnlock()
+	case ReadAndWrite:
+		inMemoryCacheLock.Unlock()
+	}
+	kvs.Data = nil
 	return
 }
 
-func toData(compatibleData map[string]interface{}) (Data, error) {
+func toData(compatibleData map[string]interface{}, permission Permission) (Data, error) {
 	data := map[string]Value{}
 
 	for key, compatibleValue := range compatibleData {
@@ -105,7 +134,8 @@ func toData(compatibleData map[string]interface{}) (Data, error) {
 	}
 
 	return Data{
-		data: data,
+		data:       data,
+		permission: permission,
 	}, nil
 }
 

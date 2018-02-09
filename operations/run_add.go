@@ -1,8 +1,9 @@
 package operations
 
 import (
-	"github.com/matsu-chara/gol/kvs"
 	"time"
+
+	"github.com/matsu-chara/gol/kvs"
 )
 
 // RunAdd run add
@@ -17,10 +18,8 @@ func RunAdd(filepath string, key string, link string, registeredBy string, isFor
 		return err
 	}
 
-	db, err := kvs.Open(filepath)
-	defer func() {
-		db.Close()
-	}()
+	db, err := kvs.Open(filepath, kvs.ReadAndWrite)
+	defer db.Close()
 	if err != nil {
 		return err
 	}

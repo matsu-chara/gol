@@ -14,7 +14,8 @@ func TestRunRm(t *testing.T) {
 
 	RunRm(testFile, "k1", "")
 
-	db, err := kvs.Open(testFile)
+	db, err := kvs.Open(testFile, kvs.ReadAndWrite)
+	defer db.Close()
 	if err != nil {
 		t.Errorf("kvs open failed %s", err)
 	}
@@ -38,7 +39,8 @@ func TestRunRmSameRegisteredBy(t *testing.T) {
 
 	RunRm(testFile, "k1", registeredBy)
 
-	db, err := kvs.Open(testFile)
+	db, err := kvs.Open(testFile, kvs.ReadAndWrite)
+	defer db.Close()
 	if err != nil {
 		t.Errorf("kvs open failed %s", err)
 	}
@@ -62,7 +64,8 @@ func TestRunRmDifferentRegisteredBy(t *testing.T) {
 
 	RunRm(testFile, "k1", "")
 
-	db, err := kvs.Open(testFile)
+	db, err := kvs.Open(testFile, kvs.ReadAndWrite)
+	defer db.Close()
 	if err != nil {
 		t.Errorf("kvs open failed %s", err)
 	}
