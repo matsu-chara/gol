@@ -13,8 +13,7 @@ import (
 // KVS which have data and metadata
 type KVS struct {
 	filename string
-	Data
-	mutex sync.Mutex
+	*Data
 }
 
 const (
@@ -22,9 +21,76 @@ const (
 	filePermission = 0644
 )
 
+// for inmemory cache.
+// this will shared by only same process. so, CLI will be unaffected by this cache & lock.
+var inMemoryCacheLock sync.RWMutex
+var inMemoryCache *Data
+
+// CacheWarming read file and assign to inMemoryCache
+func CacheWarming(filename string) error {
+	inMemoryCacheLock.Lock()
+	defer inMemoryCacheLock.Unlock()
+	kvsForCache, err := readData(filename, ReadAndWrite)
+	if err != nil {
+		return err
+	}
+	updateCache(kvsForCache.Data)
+	return nil
+}
+
 // Open returns KVS data and metadata.
-func Open(filename string) (*KVS, error) {
-	if err := prepareFile(filename); err != nil {
+func Open(filename string, permission Permission) (*KVS, error) {
+	switch permission {
+	case ReadOnly:
+		inMemoryCacheLock.RLock() // prevent read file, during writing file. will release in Close method
+		if inMemoryCache != nil {
+			kvs := KVS{
+				filename,
+				inMemoryCache,
+			}
+			return &kvs, nil // return cache
+		}
+	case ReadAndWrite:
+		inMemoryCacheLock.Lock() // will release in Close method
+		inMemoryCache = nil
+	}
+	return readData(filename, permission)
+}
+
+// Save all data.
+func (kvs *KVS) Save() error {
+	if kvs.Data.permission != ReadAndWrite {
+		return errors.New("save error. kvs was opend with ReadOnly Permission")
+	}
+
+	newJSON, err := json.Marshal(kvs.data)
+	if err != nil {
+		return err
+	}
+
+	err = fileWrite(kvs.filename, newJSON)
+	if err != nil {
+		return err
+	}
+
+	updateCache(kvs.Data)
+	return nil
+}
+
+// Close KVS (currently do nothing)
+func (kvs *KVS) Close() {
+	switch kvs.Data.permission {
+	case ReadOnly:
+		inMemoryCacheLock.RUnlock()
+	case ReadAndWrite:
+		inMemoryCacheLock.Unlock()
+	}
+	kvs.Data = nil
+	return
+}
+
+func readData(filename string, permission Permission) (*KVS, error) {
+	if err := createFileIfNotExists(filename); err != nil {
 		return nil, err
 	}
 
@@ -39,44 +105,27 @@ func Open(filename string) (*KVS, error) {
 		return nil, err
 	}
 
-	data, err := toData(values)
+	data, err := toData(values, permission)
 	if err != nil {
 		return nil, err
 	}
 
 	kvs := KVS{
 		filename: filename,
-		Data:     data,
+		Data:     &data,
 	}
 	return &kvs, nil
 }
 
-// Save all data.
-func (kvs *KVS) Save() error {
-	kvs.mutex.Lock()
-	defer kvs.mutex.Unlock()
-
-	newJSON, err := json.Marshal(kvs.data)
-	if err != nil {
-		return err
+// call with Write Lock.
+func updateCache(data *Data) {
+	inMemoryCache = &Data{
+		data:       data.data,
+		permission: ReadOnly, // as read only kvs
 	}
-
-	err = fileWrite(kvs.filename, newJSON)
-	if err != nil {
-		return err
-	}
-
-	kvs.Close()
-	return nil
 }
 
-// Close KVS (currently do nothing)
-func (kvs *KVS) Close() {
-	// do nothing
-	return
-}
-
-func toData(compatibleData map[string]interface{}) (Data, error) {
+func toData(compatibleData map[string]interface{}, permission Permission) (Data, error) {
 	data := map[string]Value{}
 
 	for key, compatibleValue := range compatibleData {
@@ -105,11 +154,12 @@ func toData(compatibleData map[string]interface{}) (Data, error) {
 	}
 
 	return Data{
-		data: data,
+		data:       data,
+		permission: permission,
 	}, nil
 }
 
-func prepareFile(filename string) error {
+func createFileIfNotExists(filename string) error {
 	if err := os.MkdirAll(path.Dir(filename), dirPermission); err != nil {
 		return err
 	}

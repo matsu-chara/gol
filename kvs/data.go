@@ -1,13 +1,26 @@
 package kvs
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 )
 
+// Permission read or write
+type Permission int
+
+const (
+	// ReadOnly read only (no write)
+	ReadOnly Permission = iota
+
+	// ReadAndWrite read and write
+	ReadAndWrite
+)
+
 // Data in kvs
 type Data struct {
-	data map[string]Value
+	data       map[string]Value
+	permission Permission
 }
 
 // Get key from data
@@ -27,6 +40,9 @@ func (data *Data) Get(key string) (*Entry, bool) {
 
 // Put entry to data.
 func (data *Data) Put(entry *Entry) error {
+	if data.permission != ReadAndWrite {
+		return errors.New("permission denied")
+	}
 	oldValue, ok := data.Get(entry.Key)
 	if ok {
 		return fmt.Errorf("%s is already registered as %s by %s", entry.Key, oldValue.Value.Link, oldValue.Value.RegisteredBy)
@@ -38,6 +54,9 @@ func (data *Data) Put(entry *Entry) error {
 
 // Remove key from data.
 func (data *Data) Remove(key string, registeredBy string) error {
+	if data.permission != ReadAndWrite {
+		return errors.New("permission denied")
+	}
 	if _, ok := data.data[key]; !ok {
 		return nil
 	}

@@ -16,7 +16,8 @@ func TestRunAdd(t *testing.T) {
 
 	RunAdd(testFile, "key_add", "value", registeredBy, isForce)
 
-	db, err := kvs.Open(testFile)
+	db, err := kvs.Open(testFile, kvs.ReadAndWrite)
+	defer db.Close()
 	if err != nil {
 		t.Errorf("kvs open failed %s", err)
 	}

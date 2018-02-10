@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"sync"
-)
 
-// lockCtx manage kvs lock.
-var lockCtx sync.RWMutex
+	"github.com/matsu-chara/gol/kvs"
+)
 
 // RunServer run server
 func RunServer(filepath string, port uint) error {
+	kvs.CacheWarming(filepath)
 	handler := NewGolServerHandler(filepath)
 	http.HandleFunc("/", handler)
 

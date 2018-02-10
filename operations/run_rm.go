@@ -4,10 +4,8 @@ import "github.com/matsu-chara/gol/kvs"
 
 // RunRm run rm
 func RunRm(filepath string, key string, registeredBy string) error {
-	db, err := kvs.Open(filepath)
-	defer func() {
-		db.Close()
-	}()
+	db, err := kvs.Open(filepath, kvs.ReadAndWrite)
+	defer db.Close()
 	if err != nil {
 		return err
 	}

@@ -1,18 +1,21 @@
 package server
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/matsu-chara/gol/kvs"
 )
 
 func tempTest(name string) string {
-	return filepath.Join(os.TempDir(), "/gol_test_"+name)
+	return filepath.Join(os.TempDir(), fmt.Sprintf("/gol_test_%s_%d", name, time.Now().UnixNano()))
 }
 
 func initDb(testFile string) error {
-	db, err := kvs.Open(testFile)
+	db, err := kvs.Open(testFile, kvs.ReadAndWrite)
+	defer db.Close()
 	if err != nil {
 		return err
 	}

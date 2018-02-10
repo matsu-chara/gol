@@ -10,16 +10,10 @@ import (
 func NewGolServerHandler(filepath string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
-			lockCtx.RLock()
-			defer lockCtx.RUnlock()
 			handleGet(filepath, w, r)
 		} else if r.Method == "PUT" {
-			lockCtx.Lock()
-			defer lockCtx.Unlock()
 			handlePut(filepath, w, r)
 		} else if r.Method == "DELETE" {
-			lockCtx.Lock()
-			defer lockCtx.Unlock()
 			handleDelete(filepath, w, r)
 		} else {
 			handleUnsupported(filepath, w, r)
