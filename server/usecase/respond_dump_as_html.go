@@ -7,6 +7,7 @@ import (
 	"github.com/matsu-chara/gol/operations"
 )
 
+// TODO separate other file
 var dumpTemplate = template.Must(template.New("gol").Parse(`
 <!DOCTYPE html>
 <html lang="en">
@@ -23,9 +24,12 @@ var dumpTemplate = template.Must(template.New("gol").Parse(`
   />
   <style>
     #table-wrapper {
-		max-height: 800px;
-		overflow-y: scroll;
-	}
+		  max-height: 800px;
+		  overflow-y: scroll;
+    }
+    .no-bottom-margin {
+      margin-bottom: 0px;
+    }
   </style>
 </head>
 
@@ -37,24 +41,25 @@ var dumpTemplate = template.Must(template.New("gol").Parse(`
   </nav>
   <div class="container">
     <h4><i class="material-icons">view_list</i> current links (<a href="/api/dump">as json</a>)</h4>
-	<div id="table-wrapper">
-	  <table>
-	    <thead>
-	    	<tr>
-	    	<th>Key</th>
-	    	<th>Link</th>
-	    	</tr>
-	    </thead>
-	    <tbody>
-	    	{{ range $key, $value := . }}
-	    	<tr>
-	    	<td>{{ $key }}</td>
-	    	<td><a href="{{ $value.Link }}">{{ $value.Link }}</a></td>
-	    	</tr>
-	    	{{ end }}
-	    </tbody>
-	  </table>
-	</div>
+    <div id="search-form-wrapper" class="row no-bottom-margin">
+      <form id="search-form" class="col s4">
+        <div class="input-field">
+          <input id="link-name" class="text no-bottom-margin" type="text" autocomplete="off" placeholder="type to search"/>
+        </div>
+      </form>
+    </div>
+    <div id="table-wrapper">
+      <table id="link-table">
+        <tbody>
+          {{ range $key, $value := . }}
+          <tr>
+          <td>{{ $key }}</td>
+          <td><a href="{{ $value.Link }}">{{ $value.Link }}</a></td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
     <div class="row">
       <h4>register new link</h4>
       <form id="register-form" class="col s12">
@@ -141,6 +146,27 @@ var dumpTemplate = template.Must(template.New("gol").Parse(`
       req.open("DELETE", "/" + keyInput.value + "?registeredBy=" + encodeURIComponent(registeredByInput.value), true);
       req.send(null);
     }
+
+    function searchLinks() {
+      let searchWordsForm = document.getElementById('link-name');
+      let linkTable = document.getElementById("link-table");
+      let linkTr = linkTable.getElementsByTagName("tr");
+
+      let searchWords = searchWordsForm.value.split(" ");
+
+      for (i = 0; i < linkTr.length; i++) {
+        linkTd = linkTr[i].getElementsByTagName("td")[0]; // [0] is link key element.
+        if (!linkTd) {
+          continue;
+        }
+        if (searchWords.every(w =>linkTd.innerHTML.includes(w))) {
+          linkTr[i].style.display = "";
+        } else {
+          linkTr[i].style.display = "none";
+        }
+      }
+    }
+    document.getElementById('search-form').addEventListener('input', searchLinks);
   </script>
 </body>
 
