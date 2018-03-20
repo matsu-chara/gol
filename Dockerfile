@@ -1,4 +1,4 @@
-FROM golang:1.9.3-alpine
+FROM golang:1.9.3-alpine as builder
 MAINTAINER matsu-chara <matsuy00@gmail.com>
 
 WORKDIR /go/src/github.com/matsu-chara/gol
@@ -14,7 +14,10 @@ COPY Gopkg.lock .
 RUN dep ensure -vendor-only
 
 COPY . .
-RUN go build && go install
+RUN go build
 
+FROM alpine
+RUN apk add --no-cache ca-certificates
+COPY --from=builder /go/src/github.com/matsu-chara/gol/gol /opt/bin/gol
 EXPOSE 5656
-ENTRYPOINT ["gol"]
+ENTRYPOINT ["/opt/bin/gol"]
